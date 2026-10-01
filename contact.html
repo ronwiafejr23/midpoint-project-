@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antz Cuts | Contact</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <nav class="container nav">
+      <a href="index.html" class="logo">ANTZ<span>_</span>CUTS</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+        <li><a href="   book.html" class="btn btn-primary">Book Now</a></li>
+      </ul>
+    </nav>
+    <div class="pole"></div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Get in touch</p>
+        <h1>Contact</h1>
+      </div>
+    </section>
+
+    <section style="padding-top: 20px;">
+      <div class="container contact-grid">
+        <div class="card">
+          <h3>Reach me</h3>
+          <div class="info-item">
+            <span class="icon">📅</span>
+            <div><small>Fastest way to book</small><a href="https://book.heygoldie.com/Antz-cuts" target="_blank">book.heygoldie.com/Antz-cuts</a></div>
+          </div>
+          <div class="info-item">
+            <span class="icon">📸</span>
+            <div><small>Instagram</small><a href="https://www.instagram.com/antz_cuts" target="_blank">@antz_cuts</a></div>
+          </div>
+          <div class="info-item">
+            <span class="icon">🎵</span>
+            <div><small>TikTok</small><a href="https://www.tiktok.com/@antzcuts" target="_blank">@antzcuts</a></div>
+          </div>
+          <div class="info-item">
+            <span class="icon">✉️</span>
+            <div><small>email</small><a href="mailto:antscutz@gmail.com">antscutz@gmail.com</a></div>
+          </div>
+          <div class="info-item">
+            <span class="icon">🕒</span>
+            <div><small>Hours</small>Sun–Fri, times vary &middot; Closed Saturday</div>
+          </div>
+          <div class="info-item">
+            <span class="icon">🏠</span>
+            <div><small>House calls</small>$25–35 &middot; ask about availability</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Send a message</h3>
+          <form id="contact-form">
+            <div class="row">
+              <label>Name<input type="text" name="name" required placeholder="Your name"></label>
+              <label>Phone or email<input type="text" name="contact" required placeholder="How should I reach you?"></label>
+            </div>
+            <label>What do you need?
+              <select name="topic">
+                <option>General question</option>
+                <option>House call request</option>
+                <option>Group / event booking</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label>Message<textarea name="message" required placeholder="Tell me what you're looking for..."></textarea></label>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+            <p class="form-note" id="form-note">Thanks! Your message was sent. I'll get back to you soon.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <span>&copy; 2026 Antz Cuts &middot; Anthony Williams</span>
+      <div class="socials">
+        <a href="https://www.instagram.com/antz_cuts" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@antzcuts" target="_blank">TikTok</a>
+        <a href="#" target="_blank">Facebook</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Demo only: this form doesn't send anywhere yet.
+    // To make it real, connect it to a service like Formspree (set the form's action URL).
+    document.getElementById("contact-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      document.getElementById("form-note").style.display = "block";
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>

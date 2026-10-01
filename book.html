@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antz Cuts | Book</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <nav class="container nav">
+      <a href="index.html" class="logo">ANTZ<span>_</span>CUTS</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="book.html" class="btn btn-primary">Book Now</a></li>
+      </ul>
+    </nav>
+    <div class="pole"></div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Reserve your chair</p>
+        <h1>Book a Cut</h1>
+      </div>
+    </section>
+
+    <section style="padding-top: 20px;">
+      <div class="container booking">
+
+        <!-- Step 1: service -->
+        <div class="card step">
+          <h3><span class="step-num">1</span> Choose a service</h3>
+          <div class="service-picker" id="service-picker"></div>
+        </div>
+
+        <!-- Step 2: date -->
+        <div class="card step" id="step-date">
+          <h3><span class="step-num">2</span> Pick a day</h3>
+          <div class="cal-head">
+            <button class="cal-nav" id="prev" aria-label="Previous month">&#8249;</button>
+            <strong id="month-label"></strong>
+            <button class="cal-nav" id="next" aria-label="Next month">&#8250;</button>
+          </div>
+          <div class="cal-grid" id="calendar"></div>
+          <p class="hint">Greyed-out days are closed or fully booked.</p>
+        </div>
+
+        <!-- Step 3: time -->
+        <div class="card step" id="step-time">
+          <h3><span class="step-num">3</span> Pick a time</h3>
+          <p class="hint" id="time-label">Choose a day first.</p>
+          <div class="time-grid" id="times"></div>
+        </div>
+
+        <!-- Step 4: details -->
+        <div class="card step" id="step-details">
+          <h3><span class="step-num">4</span> Your details</h3>
+          <p class="summary" id="summary">Choose a service, day and time.</p>
+          <form id="book-form">
+            <div class="row">
+              <label>Name<input type="text" id="name" required placeholder="Your name"></label>
+              <label>Phone<input type="tel" id="phone" required placeholder="(555) 555-5555"></label>
+            </div>
+            <button type="submit" class="btn btn-primary" id="confirm" disabled>Confirm Booking</button>
+          </form>
+        </div>
+
+        <!-- Confirmation -->
+        <div class="card confirm" id="confirmation" hidden>
+          <div class="confirm-icon">✓</div>
+          <h2>You're booked!</h2>
+          <p id="confirm-text"></p>
+          <a href="book.html" class="btn btn-ghost">Book another</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <span>&copy; 2026 Antz Cuts &middot; Anthony Williams</span>
+      <div class="socials">
+        <a href="https://www.instagram.com/antz_cuts" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@antzcuts" target="_blank">TikTok</a>
+        <a href="#" target="_blank">Facebook</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ========== SHARED BOOKING LOGIC (same in admin.html) ==========
+       Data is saved in this browser's localStorage (prototype only). */
+
+    const SLOT_MINUTES = 30;
+
+    // Weekly hours. 0 = Sunday ... 6 = Saturday. null = closed.
+    const WEEKLY_HOURS = {
+      0: { open: "08:30", close: "21:30" },
+      1: { open: "08:35", close: "21:30" },
+      2: { open: "16:35", close: "21:30" },
+      3: { open: "14:35", close: "17:00" },
+      4: { open: "16:35", close: "21:30" },
+      5: { open: "14:35", close: "17:00" },
+      6: null,
+    };
+
+    const SERVICES = [
+      { id: "first",   name: "First Haircut (new clients)", price: "$5",     minutes: 30 },
+      { id: "adult",   name: "Adult Haircut (12+)",         price: "$15",    minutes: 30 },
+      { id: "kids",    name: "Kids Haircut (11 & under)",   price: "$10",    minutes: 25 },
+      { id: "shave",   name: "Shave",                       price: "$10",    minutes: 20 },
+      { id: "beard",   name: "Beard",                       price: "$5",     minutes: 5  },
+      { id: "beardmu", name: "Beard & Mustache",            price: "$5",     minutes: 10 },
+      { id: "mus",     name: "Mustache",                    price: "$5",     minutes: 5  },
+      { id: "brows",   name: "Eyebrows",                    price: "$5",     minutes: 5  },
+      { id: "house",   name: "House Call",                  price: "$25–35", minutes: 60 },
+    ];
+
+    const KEYS = {
+      daysOff: "antz_days_off",
+      blockedSlots: "antz_blocked",
+      bookings: "antz_bookings",
+    };
+
+    function load(key) {
+      try { return JSON.parse(localStorage.getItem(key)) || []; }
+      catch { return []; }
+    }
+    function save(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch { }
+    }
+
+    function dateKey(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+    function parseKey(key) {
+      const [y, m, d] = key.split("-").map(Number);
+      return new Date(y, m - 1, d);
+    }
+    function toMinutes(hhmm) {
+      const [h, m] = hhmm.split(":").map(Number);
+      return h * 60 + m;
+    }
+    function toHHMM(mins) {
+      return `${String(Math.floor(mins / 60)).padStart(2, "0")}:${String(mins % 60).padStart(2, "0")}`;
+    }
+    function prettyTime(hhmm) {
+      let [h, m] = hhmm.split(":").map(Number);
+      const ampm = h >= 12 ? "PM" : "AM";
+      h = h % 12 || 12;
+      return `${h}:${String(m).padStart(2, "0")} ${ampm}`;
+    }
+    function prettyDate(key) {
+      return parseKey(key).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
+    }
+    function getService(id) {
+      return SERVICES.find(s => s.id === id);
+    }
+    function todayKey() { return dateKey(new Date()); }
+
+    // Every slot start time for a day, based on weekly hours.
+    function allSlots(key) {
+      const hours = WEEKLY_HOURS[parseKey(key).getDay()];
+      if (!hours) return [];
+      const slots = [];
+      for (let t = toMinutes(hours.open); t + SLOT_MINUTES <= toMinutes(hours.close); t += SLOT_MINUTES) {
+        slots.push(toHHMM(t));
+      }
+      return slots;
+    }
+
+    function slotsNeeded(serviceId) {
+      const svc = getService(serviceId);
+      return Math.max(1, Math.ceil((svc ? svc.minutes : SLOT_MINUTES) / SLOT_MINUTES));
+    }
+
+    // Slot times already taken by bookings (a long service covers several slots).
+    function bookedSlots(key) {
+      const taken = new Set();
+      for (const b of load(KEYS.bookings)) {
+        if (b.date !== key) continue;
+        const start = toMinutes(b.time);
+        for (let i = 0; i < slotsNeeded(b.serviceId); i++) taken.add(toHHMM(start + i * SLOT_MINUTES));
+      }
+      return taken;
+    }
+
+    function isDayOff(key) { return load(KEYS.daysOff).includes(key); }
+    function isBlocked(key, time) { return load(KEYS.blockedSlots).includes(`${key} ${time}`); }
+
+    function isPast(key, time) {
+      const [h, m] = time.split(":").map(Number);
+      const d = parseKey(key);
+      d.setHours(h, m, 0, 0);
+      return d <= new Date();
+    }
+
+    // Start times a customer can actually book for a service.
+    function availableTimes(key, serviceId) {
+      if (isDayOff(key)) return [];
+      const slots = allSlots(key);
+      const taken = bookedSlots(key);
+      const need = slotsNeeded(serviceId);
+      return slots.filter((time, i) => {
+        if (isPast(key, time)) return false;
+        for (let j = 0; j < need; j++) {
+          const s = slots[i + j];
+          if (!s || taken.has(s) || isBlocked(key, s)) return false;
+        }
+        return true;
+      });
+    }
+
+    function addBooking(booking) {
+      const all = load(KEYS.bookings);
+      if (!availableTimes(booking.date, booking.serviceId).includes(booking.time)) return false;
+      all.push({ id: Date.now().toString(36), ...booking });
+      save(KEYS.bookings, all);
+      return true;
+    }
+    function cancelBooking(id) {
+      save(KEYS.bookings,)
+    }
