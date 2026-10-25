@@ -8,7 +8,7 @@
   --color-muted:     #a3a09a;   /* secondary text         */
   --color-accent:    #f7f0e4;   /* brand gold: prices, buttons, highlights */
   --color-accent-hover: #f90000;
-  --color-red:       #b3261e;   /* barber-pole red, "Closed" label */
+  --color-red:       #f90000;   /* barber-pole red, "Closed" label */
   --color-blue:      #1f4e8c;   /* barber-pole blue       */
 
   /* --- Typography: two fonts only --- */
@@ -639,3 +639,36 @@ footer {
     aspect-ratio: 16 / 10;
   }
 }
+.brand {
+  display: flex;
+  align-items: center;      /* vertically lines the logo up with the text */
+  justify-content: center;  /* keeps the pair centered in the header */
+  gap: 12px;                /* space between the logo and the A */
+}
+
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;       /* crops the image to a circle */
+  object-fit: cover;
+  background: none;
+  padding: 0;
+  box-shadow: none;
+}
+.brand {
+    display: flex;
+    align-items: center;      /* lines the logo up vertically with the text */
+    justify-content: center;  /* centers the pair in the header */
+    gap: 12px;                /* space between logo and the A */
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;       /* keeps it round */
+}
+
+nav a{ 
+  color:#b3261e;
+}
+

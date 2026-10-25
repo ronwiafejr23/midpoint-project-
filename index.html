@@ -18,9 +18,10 @@
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="book.html">Book Now</a></li>
+        
       </ul>
     </nav>
-    <div class="pole"></div>
+            <div class="pole"></div>
   </header>
 
   <main>
@@ -47,36 +48,62 @@
 
         
           <div class="service">
-            <div class="top"><h3>Adult Haircut (12+)</h3><span class="price">$15</span></div>
+            <div class="top"><h3>Adult Haircut (12+)</h3><span class="price">$20</span></div>
             <small>30 min</small>
+            <img src="IMG_5258.png"  class="service-img" width="400" height="400" alt="Adult haircut example"> 
           </div>
           <div class="service">
-            <div class="top"><h3>Kids Haircut (11 &amp; under)</h3><span class="price">$10</span></div>
+            <div class="top"><h3>Kids Haircut (11 &amp; under)</h3><span class="price">$15</span></div>
             <small>25 min</small>
+            <img id="photo" src="IMG_3111.jpeg" alt="My photo" width="300">
+
+<script>
+  setTimeout(function () {
+    document.getElementById("photo").src = "IMG_3112.jpeg";
+  }, 3000);
+</script>
+
+<script>
+  const photos = ["IMG_3111.jpeg", "IMG_3112.jpeg"];
+  let i = 0;
+
+  setInterval(function () {
+    i = (i + 1) % photos.length;
+    document.getElementById("photo").src = photos[i];
+  }, 3000);
+</script>
+
           </div>
           <div class="service">
             <div class="top"><h3>Shave</h3><span class="price">$10</span></div>
             <small>20 min</small>
+            <video controls width="35%">
+     <source src="shave.mp4" type="video/mp4">
+   </video>
+         
           </div>
           <div class="service">
             <div class="top"><h3>Beard</h3><span class="price">$5</span></div>
             <small>5 min</small>
+            <video controls width="35%">
+     <source src="beard.mp4" type="video/mp4">
+   </video>
           </div>
           <div class="service">
             <div class="top"><h3>Beard &amp; Mustache</h3><span class="price">$5</span></div>
             <small>10 min</small>
+              <video controls width="35%">
+  <source src="me.mp4" type="video/mp4">
+</video>
           </div>
           <div class="service">
             <div class="top"><h3>Mustache</h3><span class="price">$5</span></div>
             <small>5 min</small>
           </div>
-          <div class="service">
-            <div class="top"><h3>Eyebrows</h3><span class="price">$5</span></div>
-            <small>5 min</small>
-          </div>
+          
           <div class="service">
             <span class="tag">I come to you</span>
-            <div class="top"><h3>House Call</h3><span class="price">$25–35</span></div>
+            <div class="top"><h3>House Call</h3><span class="price">$45</span></div>
             <small>1 hour</small>
           </div>
         </div>
