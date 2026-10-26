@@ -153,7 +153,9 @@ function cancelBooking(id) {
    ========================================================================== */
 
 function initBookingPage() {
-  const $ = id => document.getElementById(id);
+  // DOM selection: every lookup on this page goes through querySelector.
+  // $("name") is short for document.querySelector("#name").
+  const $ = id => document.querySelector("#" + id);
   const picker = $("service-picker");
   if (!picker) return;
 
@@ -301,7 +303,30 @@ function initBookingPage() {
   });
 
   $("name").addEventListener("input", updateSummary);
-  $("phone").addEventListener("input", updateSummary);
+  $("phone").addEventListener("input", () => {
+    checkPhone();
+    updateSummary();
+  });
+
+  /* Decision based on user input: is the phone number usable?
+     Reads what the user typed (.value), decides with if / else if / else,
+     and shows visible feedback under the form (.textContent). */
+  function checkPhone() {
+    const msg = $("phone-msg");
+    const typed = $("phone").value.trim();
+    const digits = typed.replace(/\D/g, "").length;
+
+    if (typed === "") {
+      msg.textContent = "";
+      msg.className = "hint";
+    } else if (digits < 10) {
+      msg.textContent = `Phone number needs 10 digits (you have ${digits}).`;
+      msg.className = "hint error";
+    } else {
+      msg.textContent = "Phone number looks good.";
+      msg.className = "hint ok";
+    }
+  }
 
   /* Submit */
   $("book-form").addEventListener("submit", e => {
@@ -328,7 +353,7 @@ function initBookingPage() {
     const confirmBox = $("confirmation");
     confirmBox.hidden = false;
     $("confirm-text").textContent =
-      `${booking.name}, you're set for a ${svc.name} on ${prettyDate(booking.date)} at ${prettyTime(booking.time)}.`;
+      `${booking.name}, you're set for ${svc.name} on ${prettyDate(booking.date)} at ${prettyTime(booking.time)}.`;
 
     // Pre-filled email so Anthony actually gets the booking
     const subject = `Booking: ${svc.name} – ${prettyDate(booking.date)} ${prettyTime(booking.time)}`;

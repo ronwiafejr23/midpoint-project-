@@ -579,6 +579,219 @@ textarea {
 
 
 /* ==========================================================================
+   8b. BOOKING PAGE (book.html) — styles for the pieces booking.js builds
+   ========================================================================== */
+.booking {
+  display: grid;
+  gap: var(--space-md);
+  max-width: 820px;
+}
+
+.step-num {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  color: #111;
+  font-size: 0.9rem;
+}
+
+.hint {
+  margin-top: var(--space-sm);
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+/* Shared look for every button booking.js creates */
+.svc,
+.cal-day,
+.time,
+.cal-nav {
+  font: inherit;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.svc:hover,
+.cal-day:hover:not(:disabled),
+.time:hover,
+.cal-nav:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.svc.selected,
+.cal-day.selected,
+.time.selected {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #111;
+}
+
+/* --- Step 1: service cards --- */
+.service-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.svc {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.svc-name {
+  font-weight: 600;
+}
+
+.svc-meta {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.svc.selected .svc-meta,
+.svc.selected .price {
+  color: #111;
+}
+
+/* --- Step 2: calendar --- */
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.cal-nav {
+  width: 38px;
+  height: 38px;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.cal-nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);   /* 7 days per week */
+  gap: 6px;
+}
+
+.cal-dow {
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cal-day {
+  height: 44px;
+  font-weight: 600;
+}
+
+.cal-day.today {
+  border-color: var(--color-red);
+}
+
+.cal-day:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* --- Step 3: times --- */
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  margin-top: var(--space-sm);
+}
+
+.time {
+  padding: 10px;
+  font-weight: 600;
+}
+
+/* --- Step 4: details --- */
+.summary {
+  margin-bottom: var(--space-sm);
+  color: var(--color-muted);
+}
+
+.summary b {
+  color: var(--color-text);
+}
+
+#book-form {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+#book-form .btn {
+  justify-self: start;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+#book-form .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#phone-msg { margin-top: 0; min-height: 1.4em; }
+.hint.error { color: var(--color-red); }
+.hint.ok { color: #4ade80; }
+
+/* --- Confirmation card --- */
+.confirm {
+  text-align: center;
+}
+
+.confirm-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: var(--space-sm);
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  color: #111;
+  font-size: 1.6rem;
+}
+
+.confirm h2 {
+  font-size: 2.6rem;
+}
+
+.confirm p {
+  margin: var(--space-sm) 0 var(--space-md);
+  color: var(--color-muted);
+}
+
+.confirm .btn {
+  margin: 4px;
+}
+
+@media (max-width: 760px) {
+  .cal-grid { gap: 4px; }
+  .booking .row { grid-template-columns: 1fr; }
+}
+
+
+/* ==========================================================================
    9. FOOTER (identical on all three pages)
    ========================================================================== */
 footer {
